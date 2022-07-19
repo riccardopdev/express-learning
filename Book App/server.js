@@ -15,6 +15,7 @@ const PORT = 3000;
 
 const indexRouter = require('./routes/index');
 const authorsRouter = require('./routes/authors');
+const booksRouter = require('./routes/books');
 
 /* ---------- WE COULD USE THIS INSTEAD OF body-parser ---------- */
 //app.use(express.urlencoded({ extended: false })); //Allow us to access the body values from req.body
@@ -44,6 +45,7 @@ db.once('open', () => console.log('Connected to MongoDB'));
 //Add all the endpoints we created in the routes (Controller) folder
 app.use('/', indexRouter);
 app.use('/authors', authorsRouter);
+app.use('/books', booksRouter);
 
 //The port number will be provided by the server, or be set to 3000 if we are testing locally
 app.listen(process.env.PORT || PORT);
