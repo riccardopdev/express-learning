@@ -8,6 +8,7 @@ const express = require('express');
 const expressLayouts = require('express-ejs-layouts');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser'); //Allow us to access the body values from req.body
+const methodOverride = require('method-override'); //Allow to override GET and POST method from an HTML form to PUT and DELETE
 
 const app = express();
 
@@ -26,6 +27,9 @@ app.set('views', __dirname + '/views');
 //Set up layouts
 app.set('layout', 'layouts/layout');
 app.use(expressLayouts);
+
+//Set up method-override and specify what the method is called in the HTML form: _method
+app.use(methodOverride('_method'));
 
 //Set up folder for static files
 app.use(express.static('public'));

@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const AuthorModel = require('../models/author.schema');
+const BookModel = require('../models/book.schema');
 
 //Get all authors
 router.get('/', async (req, res) => {
@@ -27,7 +28,7 @@ router.get('/', async (req, res) => {
 
 //Display page to create a new author
 router.get('/new', (req, res) => {
-    res.render('authors/new', {author: new AuthorModel()})
+    res.render('authors/new', {author: new AuthorModel()});
 });
 
 //Endpoint to send data to create new author
@@ -36,13 +37,79 @@ router.post('/', async (req, res) => {
 
     try {
         const newAuthor = await author.save();
-        // res.redirect(`authors/${newAuthor.id}`);
-        res.redirect('authors');
+        res.redirect(`authors/${newAuthor.id}`);
     } catch (error) {
         res.render('authors/new', {
             author: author,
             errorMessage: 'Error creating author'
         });
+    }
+});
+
+//Get one author by ID
+router.get('/:id', async (req, res) => {
+    try {
+        const author = await AuthorModel.findById(req.params.id);
+        const books = await BookModel.find({author: author.id}).limit(6).exec();
+        res.render('authors/show', {
+            author: author,
+            booksByAuthor: books
+        });
+    } catch (error) {
+        console.error(error);
+        res.redirect('/');
+    }
+});
+
+//Get page to edit an author
+router.get('/:id/edit', async (req, res) => {
+
+    try {
+        const author = await AuthorModel.findById(req.params.id);
+
+        res.render('authors/edit', {author: author});
+    } catch (error) {
+        console.error(error);
+        res.redirect('/authors');
+    }
+    
+});
+
+//Update an author
+router.put('/:id', async (req, res) => {
+    let author;
+
+    try {
+        author = await AuthorModel.findById(req.params.id);
+        author.name = req.body.name;
+        await author.save();
+        res.redirect(`/authors/${author.id}`);
+    } catch (error) {
+        if(author == null) {
+            res.redirect('/');
+        } else {
+            res.render('authors/edit', {
+                author: author,
+                errorMessage: 'Error updating author'
+            });
+        }
+    }
+});
+
+//Delete an author
+router.delete('/:id', async (req, res) => {
+    let author;
+
+    try {
+        author = await AuthorModel.findById(req.params.id);
+        await author.remove();
+        res.redirect('/authors');
+    } catch (error) {
+        if(author == null) {
+            res.redirect('/');
+        } else {
+            res.redirect(`/authors/${author.id}`)
+        }
     }
 });
 
