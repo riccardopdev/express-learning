@@ -5,8 +5,7 @@ From Web Dev Simplified tutorials: https://www.youtube.com/playlist?list=PLZlA0G
 An application built with NodeJS, express and MongoDB.
 The application allows to create and view authors and books.
 
-Dependencies:
-
+Dependencies:  
 **express:**  
 **ejs:**  
 **express-ejs-layouts:**  
@@ -15,7 +14,8 @@ Dependencies:
 **multer:** Allows to work with multipart forms (enctype="multipart/form-data") and upload files to the server  
 **method-override:** Allows to override GET and POST methods from a form into PUT and DELETE
 
-Dev dependencies
+Dev dependencies  
 **nodemon:**  
+**dotenv:**  
 
 TODO Complete comments

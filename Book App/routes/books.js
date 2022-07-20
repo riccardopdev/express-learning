@@ -80,8 +80,7 @@ router.post('/', upload.single('cover'), async (req, res) => {
     try {
         //Save the book to the database
         const newBook = await book.save();
-        // res.redirect(`books/${newBook.id}`);
-        res.redirect('books');
+        res.redirect(`books/${newBook.id}`);
     } catch (error) {
         console.log(error);
         //If a book cover image was uploaded and we have an error saving the book, remove the image
@@ -90,7 +89,105 @@ router.post('/', upload.single('cover'), async (req, res) => {
     }
 });
 
+//Get a book by its ID
+router.get('/:id', async (req, res) => {
+    try {
+        const book = await BookModel.findById(req.params.id).populate('author').exec();
+        res.render('books/show', {book: book});
+    } catch (error) {
+        console.error(error);
+        res.redirect('/');
+    }
+});
+
+//Get page to edit a book
+router.get('/:id/edit', async (req, res) => {
+    try {
+        const book = await BookModel.findById(req.params.id);
+        //Call a function that will run the logic
+        renderEditBookPage(res, book);
+    } catch (error) {
+        console.log(error);
+        res.redirect('/');
+    }
+    
+});
+
+//Update a book
+router.put('/:id', upload.single('cover'), async (req, res) => {
+    let book;
+
+    //The file operator is populated by multer. We check if there is a file
+    const fileName = req.file != null ? req.file.filename : null;
+
+    try {
+        book = await BookModel.findById(req.params.id);
+
+        book.title = req.body.title;
+        book.author = req.body.author;
+        book.publishDate = new Date(req.body.publishDate);
+        book.pageCount = req.body.pageCount;
+        book.description = req.body.description;
+
+        //If we have provided a new cover image, delete the original one and update this
+        if(fileName != null && fileName != '') {
+            removeBookCover(book.coverImageName);
+            book.coverImageName = fileName;
+        }
+        
+        //Save the book to the database
+        await book.save();
+        res.redirect(`/books/${book.id}`);
+    } catch (error) {
+        console.log(error);
+
+        //If we had an error but was able to get the book go back to the edit page, otherwise go to the home page
+        if(book != null) {
+            //If a book cover image was uploaded and we have an error updating the book, remove the image
+            if(book.coverImageName) removeBookCover(book.coverImageName);
+
+            renderEditBookPage(res, book, true);
+        } else {
+            res.redirect('/');
+        }
+    }
+});
+
+//Delete a book by its ID
+router.delete('/:id', async (req, res) => {
+    let book;
+
+    try {
+        book = await BookModel.findById(req.params.id);
+        await book.remove();
+        removeBookCover(book.coverImageName);
+        res.redirect('/books');
+    } catch (error) {
+        console.error(error);
+
+        if(book != null) {
+            //We have a book but could not remove it
+            res.render('books/show', {
+                book: book,
+                errorMessage: 'Could not remove book'
+            });
+        } else {
+            //Could not find the book
+            res.redirect('/');
+        }
+    }
+});
+
 async function renderNewBookPage(res, book, hasError = false) {
+    renderFormPage(res, book, 'new', hasError);
+}
+
+async function renderEditBookPage(res, book, hasError = false) {
+    renderFormPage(res, book, 'edit', hasError);
+}
+
+//This function will have the logic to retrieve the data and pass it to the corresponding view when rendering it
+async function renderFormPage(res, book, view, hasError = false) {
     try {
         //Retrieve the list of authors from the database
         const authors = await AuthorModel.find({});
@@ -101,10 +198,12 @@ async function renderNewBookPage(res, book, hasError = false) {
         }
 
         //If we have an error add it to the parameters
-        if(hasError) params.errorMessage = 'Error creating book';
+        if(hasError && view == 'new') params.errorMessage = 'Error creating book';
+        if(hasError && view == 'edit') params.errorMessage = 'Error editing book';
 
         //Send the parameters with book and list of authors to the page so it can populoate the HTML dropdown
-        res.render('books/new', params);
+        //We render either the books/new or books/edit views depending on the view parameter
+        res.render(`books/${view}`, params);
     } catch (error) {
         res.redirect('/books');
     }
