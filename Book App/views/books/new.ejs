@@ -2,6 +2,8 @@
 <!-- The form needs to have enctype="multipart/form-data" to allow to upload files to the server-->
 <form action="/books" method="POST" enctype="multipart/form-data">
     <%- include('_form_fields.ejs') %>
-    <a href="/books">Cancel</a>
-    <button type="submit">Create</button>
+    <div class="form-row form-row-end btn-row">
+        <a class="btn btn-danger" href="/books">Cancel</a>
+        <button class="btn btn-primary" type="submit">Create</button>
+    </div>
 </form>
