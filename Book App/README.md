@@ -6,16 +6,14 @@ An application built with NodeJS, express and MongoDB.
 The application allows to create and view authors and books.
 
 Dependencies:  
-**express:**  
-**ejs:**  
-**express-ejs-layouts:**  
-**mongoose:**  
-**body-parser:** Allow us to access the body values from req.body  
+**express:**  To create the server
+**ejs:**  Template engine for dynamic pages
+**express-ejs-layouts:**  Allows to split the HTML content in separable reusable sections
+**mongoose:**  Allows to connect to MongoDB and implement queries to the data
+**body-parser:** Allows us to access the body values from req.body  
 **multer:** Allows to work with multipart forms (enctype="multipart/form-data") and upload files to the server  
 **method-override:** Allows to override GET and POST methods from a form into PUT and DELETE
 
 Dev dependencies  
-**nodemon:**  
-**dotenv:**  
-
-TODO Complete comments
+**nodemon:**  To automatically restart the express server
+**dotenv:**  To store sensitive data in local variables
