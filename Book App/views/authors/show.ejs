@@ -6,10 +6,5 @@
 <!-- Check if this author has any associated book -->
 <% if(booksByAuthor.length > 0) { %>
     <h2 class="page-header">Books by author</h2>
-    <% booksByAuthor.forEach((book) => { %>
-        <a href="/books/<%= book.id %>">
-            <!-- The book.coverImagePath is a virtual property we created on bookSchema -->
-            <img width="100" height="150" src="<%= book.coverImagePath %>" />
-        </a>
-    <% }); %>
+    <%- include('../partials/bookGrid', {books: booksByAuthor}) %> 
 <% } %>

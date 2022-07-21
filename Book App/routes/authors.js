@@ -39,6 +39,7 @@ router.post('/', async (req, res) => {
         const newAuthor = await author.save();
         res.redirect(`authors/${newAuthor.id}`);
     } catch (error) {
+        console.error(error);
         res.render('authors/new', {
             author: author,
             errorMessage: 'Error creating author'
@@ -85,6 +86,7 @@ router.put('/:id', async (req, res) => {
         await author.save();
         res.redirect(`/authors/${author.id}`);
     } catch (error) {
+        console.error(error);
         if(author == null) {
             res.redirect('/');
         } else {
@@ -105,6 +107,7 @@ router.delete('/:id', async (req, res) => {
         await author.remove();
         res.redirect('/authors');
     } catch (error) {
+        console.error(error);
         if(author == null) {
             res.redirect('/');
         } else {

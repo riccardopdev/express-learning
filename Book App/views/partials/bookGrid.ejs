@@ -1,0 +1,12 @@
+<!-- We receive the locals.large variable and use it to specify which CSS class to use in the code below-->
+<% bookCoverClass = locals.large ? 'book-cover-large' : '' %>
+<% bookGridClass = locals.large ? 'book-grid-large' : '' %>
+
+<div class="book-grid <%= bookGridClass %>">
+    <% books.forEach((book) => { %>
+        <a href="/books/<%= book.id %>">
+            <!-- The book.coverImagePath is a virtual property we created on bookSchema -->
+            <img class="book-cover <%= bookCoverClass %>" src="<%= book.coverImagePath %>" />
+        </a>
+    <% }); %>
+</div>
