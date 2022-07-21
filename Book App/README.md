@@ -3,7 +3,12 @@
 From Web Dev Simplified tutorials: https://www.youtube.com/playlist?list=PLZlA0Gpn_vH8jbFkBjOuFjhxANC63OmXM
 
 An application built with NodeJS, express and MongoDB.
-The application allows to create and view authors and books.
+
+The MongoDB database is installed locally and requires the installation of MongoDB and mongosh:
+https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-windows/
+https://www.mongodb.com/docs/mongodb-shell/install/
+
+The application allows to create and view authors and books in two different collections in a database called mybrary.
 
 Dependencies:  
 **express:**  To create the server  
@@ -15,5 +20,5 @@ Dependencies:
 **method-override:** Allows to override GET and POST methods from a form into PUT and DELETE  
 
 Dev dependencies  
-**nodemon:**  To automatically restart the express server
-**dotenv:**  To store sensitive data in local variables
+**nodemon:**  To automatically restart the express server  
+**dotenv:**  To store sensitive data in local variables  

@@ -6,5 +6,5 @@ https://www.mongodb.com/docs/mongodb-shell/install/
 
 Once these are installed, we create and connect to a database called: LearnMongoose01.
 
-We create a Schema in the models folder.
+We create a Schema in the models folder.  
 Then in the server file we have two different function to create and save new users.
